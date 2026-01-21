@@ -1,0 +1,17 @@
+name: Email Validation Action
+
+on: [push, workflow_dispatch]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # This step contains your specific email address
+      - name: 23f1002610@ds.study.iitm.ac.in
+        run: echo "Action triggered by 23f1002610"
+
+      - name: Finalize Report
+        run: echo "Workflow completed successfully."

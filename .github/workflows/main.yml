@@ -1,17 +1,33 @@
-name: Email Validation Action
+name: DevSync Daily Automated Update
 
-on: [push, workflow_dispatch]
+on:
+  # Schedule to run once daily at 12:00 PM UTC (No wildcards for hour/minute)
+  schedule:
+    - cron: '0 12 * * *'
+  
+  # Allows you to manually trigger the workflow for testing
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
-  validate:
+  daily-commit:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Check out repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # This step contains your specific email address
-      - name: 23f1002610@ds.study.iitm.ac.in
-        run: echo "Action triggered by 23f1002610"
-
-      - name: Finalize Report
-        run: echo "Workflow completed successfully."
+      - name: Update Activity Log
+        run: |
+          echo "Automated daily sync run on $(date)" >> devsync_activity_log.txt
+          
+      # This step includes your specific email in the name as required
+      - name: Commit and Push changes for 23f1002610@ds.study.iitm.ac.in
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add devsync_activity_log.txt
+          git commit -m "Automated daily repository update" || echo "No changes to commit"
+          git push
